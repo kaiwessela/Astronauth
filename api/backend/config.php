@@ -1,4 +1,6 @@
 <?php
+# version: 0.0.1
+
 define('DB_HOST', '');
 define('DB_NAME', '');
 define('DB_USER', '');
