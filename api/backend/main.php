@@ -1,59 +1,46 @@
 <?php
+session_start();
 require('config.php');
 require('valid8.php');
-require('error.php');
+require('account.php');
+require('session.php');
+require('login.php');
+
+$pdo;
 
 class Astronauth {
-	public $pdo;
+	global $pdo;
+	public $account;
+	public $session;
+	public $login;
 
 	public function __construct() {
 		# connect to database
-		$this->pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
+		$pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
 	}
 
-	public function signin($user, $password, $keepLoggedIn) {
-		$s = $this->pdo->prepare('SELECT * FROM accounts WHERE username = :user OR email = :user');
-		$s->execute(array('user' => $user));
-		if($s->rowCount() == 0){
-			return false;
+	public function start() {
+		$this->session = Session::get();
+		if(!$this->session instanceof Session){
+			# there is no existing session, try if there is a login
+			$this->login = Login::get();
+			if(!$this->login instanceof Login){
+				# there is no existing login, user has to log in with password
+				# hier weiter
+			} else {
+				# there is an existing login, try to login
+				if($this->login->verify()){
+					# login is valid, write session
+					$this->account = Account::pull($this->login->getAccountUUID());
+					if($this->account instanceof Account){
+						$this->session = new Session($this->account);
+						$session->set();
+					}
+				}
+			}
 		} else {
-			$r = $s->fetch();
+			# there is an existing session, proceed with request
 		}
-
-		if(password_verify($password, $r['pwhash'])){
-			$_SESSION['astro_uuid'] = $r['uuid'];
-			$_SESSION['astro_login'] = true;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public function signup($username, $email, $password, $pwcheck) {
-		# validate username, email and password
-		if(Valid8::username($username) && Valid8::email($email)
-			&& Valid8::password($password, $pwcheck, false)){
-
-			$uuid = uniqid();
-			$pwhash = password_hash($password, PASSWORD_DEFAULT);
-
-			$s = $this->pdo->prepare('INSERT INTO accounts (uuid, username, email, pwhash)
-				VALUES (:uuid, :username, :email, :pwhash)');
-			$s->execute(array('uuid' => $uuid, 'username' => $username, 'email' => $email,
-				'pwhash' => $pwhash));
-
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public function signoff() {
-
-	}
-
-	public function signout() {
-
 	}
 }
 ?>

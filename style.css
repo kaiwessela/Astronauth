@@ -1,0 +1,67 @@
+.astro-box {
+	/*background-image: radial-gradient(circle farthest-side, #202092, #09092a);*/
+	background-color: #242424;
+	font-size: 100%;
+	font-family: 'Open Sans';
+	font-weight: 400;
+	padding: 0.5rem;
+	color: white;
+	width: 25rem;
+}
+
+.astro-disabled {
+	display: none;
+}
+
+.astro h1 {
+	margin: 0;
+	padding: 0.25rem 0;
+	text-align: center;
+	font-size: 1.3rem;
+	font-weight: 400;
+}
+
+.astro label {
+	font-size: 0.9rem;
+}
+
+.astro input[type=text],
+.astro input[type=email],
+.astro input[type=password] {
+	width: 100%;
+	box-sizing: border-box;
+	background-color: #ffffff10;
+	color: #ffffffdd;
+	font-family: 'Hack';
+	font-size: 1.2rem;
+	border: none;
+	padding: 0.5rem 1rem;
+	margin: 0 0 0.5rem 0;
+	transition-duration: 0.25s;
+}
+
+.astro input[type=text]:hover,
+.astro input[type=text]:focus,
+.astro input[type=email]:hover,
+.astro input[type=email]:focus,
+.astro input[type=password]:hover,
+.astro input[type=password]:focus {
+	background-color: #ffffff20;
+}
+
+.astro input[type=checkbox] {
+	border: none;
+	background-color: #ffffff10;
+}
+
+.astro input[type=submit] {
+	box-sizing: border-box;
+	background-color: #ffffff10;
+	color: #ffffffdd;
+	border: none;
+	padding: 0.5rem 1rem;
+	margin: 0;
+	font-size: 1.1rem;
+	transition-duration: 0.25s;
+	width: 100%;
+}
