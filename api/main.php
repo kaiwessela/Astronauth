@@ -108,6 +108,41 @@ class Astronauth {
 		return false;
 	}
 
+	public function signup($username, $email, $password, $pwcheck) {
+		# This function is the signup process to create a new account.
+		# $username is the username set by the user. $email is the user's email. $password is the user's password.
+		# $pwcheck is the repeated password, it must be the same as $password.
+
+		if(!isset($username) || !isset($email) || !isset($password) || !isset($pwcheck)){
+			# not all required data is provided
+			return false;
+		}
+
+		# formally validate inputs
+		if(!Valid8::username($username) || !Valid8::email($email) || !Valid8::password($password, $pwcheck, false)){
+			# not all inputs are formally valid
+			return false;
+		}
+
+		# check if username is already in use
+		$usernameCheckAccount = Account::pull($username, 'username');
+		if($usernameCheckAccount != false){
+			return false;
+		}
+
+		# check if email is already in use
+		$emailCheckAccount = Account::pull($email, 'email');
+		if($emailCheckAccount != false){
+			return false;
+		}
+
+		# everything seems to be valid, create account
+		$this->account = Account::new($username, $email, $password);
+		$this->account->push(); # push account to database
+
+		return true;
+	}
+
 	public function loggedIn($set) {
 		# This function sets and returns the login state of the user
 		if($set == false){ # set the login state to false

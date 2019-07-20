@@ -32,10 +32,14 @@ class Account {
 		if($s->rowCount() == 1){
 			$r = $s->fetch();
 			$acc = new Account($r['uuid'], $r['username'], $r['email'], $r['pwhash']);
-			$acc->exists()
+			$acc->exists(true);
 		} else {
 			return false;
 		}
+	}
+
+	public static function new($username, $email, $password) {
+		return new Account(self::generateUUID(), $username, $email, self::generateHash($password));
 	}
 
 	public function verify($password) {
@@ -43,7 +47,13 @@ class Account {
 	}
 
 	public function push() {
+		if($this->exists()){
+			$s = $pdo->prepare('UPDATE accounts SET username = :username, email = :email, pwhash = :pwhash WHERE uuid = :uuid');
+		} else {
+			$s = $pdo->prepare('INSERT INTO accounts (uuid, username, email, pwhash) VALUES (:uuid, :username, :email, :pwhash)');
+		}
 
+		$s->execute(array('uuid' => $this->uuid, 'username' => $this->username, 'email' => $this->email, 'pwhash' => $this->pwhash));
 	}
 
 	private function exists($set) { // check if account exists on database or set existance
@@ -56,10 +66,14 @@ class Account {
 		}
 	}
 
-	public function generateUUID() {
+	public static function generateUUID() {
 		$hex = bin2hex(random_bytes(16));
 		$chu = explode(' ', chunk_split($hex, 4, ' '));
 		return $chu[0].$chu[1].'-'.$chu[2].'-'.$chu[3].'-'.$chu[4].'-'.$chu[5].$chu[6].$chu[7];
+	}
+
+	public static function generateHash($password) {
+		return password_hash($password, PASSWORD_DEFAULT);
 	}
 
 	public function getUUID() {
