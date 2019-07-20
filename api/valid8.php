@@ -21,7 +21,7 @@ class Valid8 {
 		return true;
 	}
 
-	public static function password($password, $pwcheck, $hibp) {
+	public static function password($password, $pwcheck, $hibp = false) {
 		if($password != $pwcheck){
 			return false;
 		}
