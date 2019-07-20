@@ -38,6 +38,10 @@ class Account {
 		}
 	}
 
+	public function verify($password) {
+		return password_verify($password, $this->pwhash);
+	}
+
 	public function push() {
 
 	}
@@ -58,8 +62,16 @@ class Account {
 		return $chu[0].$chu[1].'-'.$chu[2].'-'.$chu[3].'-'.$chu[4].'-'.$chu[5].$chu[6].$chu[7];
 	}
 
-	private function getUUID() {
+	public function getUUID() {
 		return $this->uuid;
+	}
+
+	public function getUsername() {
+		return $this->username;
+	}
+
+	public function getEmail() {
+		return $this->email;
 	}
 }
 ?>
