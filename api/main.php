@@ -17,7 +17,7 @@ require('login.php'); # login manager -> see login.php for details
 $pdo; # PDO connection to database (TODO put into classes for security purpose)
 
 class Astronauth {
-	global $pdo;
+	//global $pdo;
 	private $account; # current account, instance of Account
 	private $session; # current session, instance of Session
 	private $login; # current login, instance of Login
@@ -79,8 +79,7 @@ class Astronauth {
 
 		# check if user is already signed in
 		if($this->loggedIn()){
-			# sign off the user
-			$this->signOff();
+			return false;
 		}
 
 		# check if $user is a username or an email

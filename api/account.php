@@ -10,7 +10,7 @@ class Account {
 
 	private $exists = false; # true = account exists on database / false = account doesnt exist on database
 
-	global $pdo; # reference to database connection connection
+	//global $pdo; # reference to database connection connection
 
 	public function __construct($uuid, $username, $email, $pwhash) {
 		$this->uuid = $uuid;

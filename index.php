@@ -20,7 +20,7 @@ session_start();
 				<input type="submit" value="Anmelden">
 			</form>
 		</div>
-		<div id="astro-signup" class="astro astro-box astro-disabled">
+		<div id="astro-signup" class="astro astro-box">
 			<h1>Registrieren</h1>
 			<form id="astro-signup-form" action="api/endpoint.php?action=signup" method="POST">
 				<label for="astro-signup-username">Benutzername</label><br>
@@ -34,16 +34,10 @@ session_start();
 				<input type="submit" value="Registrieren">
 			</form>
 		</div>
-		<div id="astro-signoff" class="astro astro-box astro-disabled">
+		<div id="astro-signoff" class="astro astro-box"><!-- astro-disabled -->
 			<h1>Abmelden</h1>
 			<form id="astro-signoff-form" action="api/endpoint.php?action=signoff" method="POST">
 				<input type="submit" value="Abmelden">
-			</form>
-		</div>
-		<div id="astro-signout" class="astro astro-box astro-disabled">
-			<h1>Konto löschen</h1>
-			<form id="astro-signout-form" action="api/endpoint.php?action=signout" method="POST">
-				<input type="submit" value="Konto löschen">
 			</form>
 		</div>
 	</body>

@@ -7,7 +7,7 @@ class Login {
 
 	private $exists = false;
 
-	global $pdo;
+	//global $pdo;
 
 	public function __construct($account) {
 		$this->account_uuid = $account->getUUID();
