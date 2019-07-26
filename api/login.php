@@ -60,6 +60,14 @@ class Login {
 		return true;
 	}
 
+	public function unset() {
+		setcookie('astronauth_login', 'deleted', time() - 3600);
+		$s = $pdo->prepare('DELETE FROM logins WHERE identifier = ?');
+		$s->execute(array($this->identifier));
+		$this->exists(false);
+		return true;
+	}
+
 	public function push() {
 		if($this->exists()){
 			$s = $pdo->prepare('UPDATE logins SET token = :token, timestamp = :timestamp

@@ -73,9 +73,15 @@ class Astronauth {
 		return false;
 	}
 
-	public function signin($user, $password, $keepLoggedIn = false) {
+	public function signIn($user, $password, $keepLoggedIn = false) {
 		# This function is the manual signin procedure (using username / email and password)
 		# The user can decide if he wants to use his username or his email
+
+		# check if user is already signed in
+		if($this->loggedIn()){
+			# sign off the user
+			$this->signOff();
+		}
 
 		# check if $user is a username or an email
 		if(Valid8::email($user)){
@@ -108,7 +114,7 @@ class Astronauth {
 		return false;
 	}
 
-	public function signup($username, $email, $password, $pwcheck) {
+	public function signUp($username, $email, $password, $pwcheck) {
 		# This function is the signup process to create a new account.
 		# $username is the username set by the user. $email is the user's email. $password is the user's password.
 		# $pwcheck is the repeated password, it must be the same as $password.
@@ -141,6 +147,23 @@ class Astronauth {
 		$this->account->push(); # push account to database
 
 		return true;
+	}
+
+	public function signOff() {
+		# This function signs the user off.
+
+		# check if user is logged in
+		if($this->loggedIn()){
+			$this->session->unset();
+			unset($this->session);
+			$this->login->unset();
+			unset($this->login);
+			unset($this->account);
+			$this->loggedIn(false);
+			return true;
+		}
+
+		return false;
 	}
 
 	public function loggedIn($set) {

@@ -33,6 +33,12 @@ class Session {
 		$_SESSION['astronauth_session'] = serialize($this);
 	}
 
+	public function unset() {
+		unset($_SESSION['astronauth_session']);
+		$this->exists(false);
+		return true;
+	}
+
 	public function exists($set) {
 		if($set == true){
 			$this->exists = true;
