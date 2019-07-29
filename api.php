@@ -48,7 +48,7 @@ if($_GET['action'] == 'signin' || $_POST['action'] == 'signin'){
 		$echo['status'] = 'Signoff failed.';
 		$echo['message'] = 'Reason: idk';
 	}
-} else if($_GET['action'] == 'status' || $_GET['action'] == 'status'){
+} else if($_GET['action'] == 'status' || $_POST['action'] == 'status'){
 	if($astronauth->loggedIn()){
 		$echo['status'] = 'Signed in.';
 		$echo['result']['uuid'] = $astronauth->getAccountUUID();
@@ -56,6 +56,15 @@ if($_GET['action'] == 'signin' || $_POST['action'] == 'signin'){
 		$echo['result']['email'] = $astronauth->getAccountEmail();
 	} else {
 		$echo['status'] = 'Signed off.';
+	}
+} else if($_GET['action'] == 'validate' || $_POST['action'] == 'validate'){
+	if(isset($_GET['type']) || isset($_POST['type'])){
+		$type = $_GET['type'] || $_POST['type'];
+		if($type == 'username' || $type == 'email'){
+
+		} else if($type == 'password') {
+			// TODO weiter weiter weiter
+		}
 	}
 } else {
 	$echo['status'] = 'Error.';
