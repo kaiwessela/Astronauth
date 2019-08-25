@@ -5,14 +5,13 @@
 # This is the main file of the Astronauth API. It's basically the endpoint of all actions that are available through
 # the api.
 
-session_start();
-
 # load config and required classes
 require('config.php'); # config
 require('valid8.php'); # input validation
 require('account.php'); # account manager
 require('session.php'); # session manager
 require('login.php'); # login manager -> see login.php for details
+require('message.php');
 
 $pdo; # PDO connection to database (TODO put into classes for security purpose)
 
@@ -22,6 +21,8 @@ class Astronauth {
 	private $session; # current session, instance of Session
 	private $login; # current login, instance of Login
 
+	private $messages = array();
+
 	private $loginState = false; # false = user is not logged in / true = user is logged in
 
 	public function __construct() {
@@ -29,7 +30,7 @@ class Astronauth {
 		$pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME, DB_USER, DB_PASSWORD);
 	}
 
-	public function init() {
+	public function start() {
 		# This function should be called each time a new Astronauth instance is opened. It logs in the user if there
 		# is an existing session or he used the 'keep logged in' function.
 		# If the autologin was successful, this function returns true.
@@ -165,7 +166,7 @@ class Astronauth {
 		return false;
 	}
 
-	public function loggedIn($set) {
+	private function loggedIn($set = null) {
 		# This function sets and returns the login state of the user
 		if($set == false){ # set the login state to false
 			$this->loginState = false;
@@ -174,6 +175,10 @@ class Astronauth {
 		} else { # do not set anything, just return the login state
 			return $this->loginState;
 		}
+	}
+
+	public function userIsLoggedIn() {
+		return $this->loggedIn();
 	}
 
 	public function getAccountUUID() { # return the uuid of the current logged in account

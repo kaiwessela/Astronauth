@@ -1,6 +1,6 @@
 <?php
-define('DB_HOST', '');
-define('DB_NAME', '');
-define('DB_USER', '');
-define('DB_PASSWORD', '');
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'astronauth');
+define('DB_USER', 'astro');
+define('DB_PASSWORD', 'FGWbBWvl4bVxbDbC');
 ?>
