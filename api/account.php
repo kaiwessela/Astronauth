@@ -8,7 +8,7 @@ class Account {
 	private $email; # email of the account / user
 	private $pwhash; # hashed password of the account
 
-	private $exists = false; # true = account exists on database / false = account doesnt exist on database
+	private $exists = false; # true = account exists on database / false = account doesnt
 
 	//global $pdo; # reference to database connection connection
 
@@ -43,9 +43,9 @@ class Account {
 		}
 	}
 
-	# create new account and return it - only use if account doesnt exist already - generates some values
+	# create new account and return it - only use if account doesnt exist already
 	public static function new($username, $email, $password) {
-		return new Account(self::generateUUID(), $username, $email, self::generateHash($password));
+		return new Account(Tools::uuid(), $username, $email, Tools::hash($password));
 	}
 
 	# check if a password is correct for the account
@@ -56,12 +56,20 @@ class Account {
 	# push account to database, update or insert
 	public function push() {
 		if($this->exists()){
-			$s = $pdo->prepare('UPDATE accounts SET username = :username, email = :email, pwhash = :pwhash WHERE uuid = :uuid');
+			$s = $pdo->prepare('UPDATE accounts SET
+				username = :username, email = :email, pwhash = :pwhash
+				WHERE uuid = :uuid');
 		} else {
-			$s = $pdo->prepare('INSERT INTO accounts (uuid, username, email, pwhash) VALUES (:uuid, :username, :email, :pwhash)');
+			$s = $pdo->prepare('INSERT INTO accounts (uuid, username, email, pwhash)
+				VALUES (:uuid, :username, :email, :pwhash)');
 		}
 
-		$s->execute(array('uuid' => $this->uuid, 'username' => $this->username, 'email' => $this->email, 'pwhash' => $this->pwhash));
+		$s->execute(array(
+			'uuid' => $this->uuid,
+			'username' => $this->username,
+			'email' => $this->email,
+			'pwhash' => $this->pwhash
+		));
 	}
 
 	# check if account exists or set this value
@@ -73,19 +81,6 @@ class Account {
 		} else {
 			return $this->exists;
 		}
-	}
-
-	# generate an uuid
-	public static function generateUUID() {
-		$hex = bin2hex(random_bytes(16)); # generate 16 random bytes and convert them to a hexadecimal string
-		$chu = explode(' ', chunk_split($hex, 4, ' ')); # split that string to 4 chars long chunks
-		return $chu[0].$chu[1].'-'.$chu[2].'-'.$chu[3].'-'.$chu[4].'-'.$chu[5].$chu[6].$chu[7]; # return and set -
-	}
-
-	# generate a hash of a given password
-	public static function generateHash($password) {
-		return password_hash($password, PASSWORD_DEFAULT);
-	}
 
 	public function getUUID() {
 		return $this->uuid;

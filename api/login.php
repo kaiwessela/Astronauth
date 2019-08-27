@@ -52,7 +52,7 @@ class Login {
 			$this->identifier = generateIdentifier();
 		}
 
-		$this->token = generateToken();
+		$this->token = $this->generateToken();
 		$this->timestamp = time();
 
 		setcookie('astronauth_login', serialize($this), time() + (12 * 30 * 24 * 60 * 60));

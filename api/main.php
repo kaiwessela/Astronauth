@@ -7,11 +7,12 @@
 
 # load config and required classes
 require('config.php'); # config
+require('tools.php');
+require('message.php');
 require('valid8.php'); # input validation
 require('account.php'); # account manager
 require('session.php'); # session manager
 require('login.php'); # login manager -> see login.php for details
-require('message.php');
 
 $pdo; # PDO connection to database (TODO put into classes for security purpose)
 
@@ -21,7 +22,7 @@ class Astronauth {
 	private $session; # current session, instance of Session
 	private $login; # current login, instance of Login
 
-	private $messages = array();
+	private $messageHandler = new MessageHandler();
 
 	private $loginState = false; # false = user is not logged in / true = user is logged in
 
@@ -181,22 +182,10 @@ class Astronauth {
 		return $this->loggedIn();
 	}
 
-	public function getAccountUUID() { # return the uuid of the current logged in account
+	public function getAccount() {
 		if($this->loggedIn()){
-			return $account->getUUID();
-		} else return false;
-	}
-
-	public function getAccountUsername() { # return the username of the current logged in account
-		if($this->loggedIn()){
-			return $account->getUsername();
-		} else return false;
-	}
-
-	public function getAccountEmail() { # return the email of the current logged in account
-		if($this->loggedIn()){
-			return $account->getEmail();
-		} else return false;
+			return $this->account;
+		}
 	}
 }
 ?>

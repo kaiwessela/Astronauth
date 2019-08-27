@@ -1,76 +1,58 @@
-	{
-		"username": {
-			"exists": {
-				"lvl": "ERR",
-				"msg": "Ein Benutzerkonto mit diesem Benutzername existiert bereits.",
-				"todo": "Bitte geben Sie einen anderen Benutzernamen ein."
-			},
-			"invalid": {
-				"length": {
-					"lvl": "ERR",
-					"msg": "Der eingegebene Benutzername hat eine ungültige Länge.",
-					"todo": "Ein Benutzername muss aus 3 bis 20 Zeichen bestehen."
-				},
-				"characters": {
-					"lvl": "ERR",
-					"msg": "Der eingegebene Benutzername enthält ungültige Zeichen.",
-					"todo": "Ein Benutzername darf nur lateinische Buchstaben, arabische Ziffern, Bindestriche (-), Unterstriche (_) und Punkte (.) enthalten."
-				}
-			}
-		},
-		"email": {
-			"exists": {
-				"lvl": "ERR",
-				"msg": "Ein Benutzerkonto mit dieser E-Mail-Adresse existiert bereits.",
-				"todo": "Bitte geben Sie eine andere E-Mail-Adresse ein."
-			},
-			"invalid": {
-				"characters": {
-					"lvl": "ERR",
-					"msg": "Die eingegebene E-Mail-Adresse hat ein ungültiges Format.",
-					"todo": "Bitte geben Sie eine korrekte E-Mail-Adresse ein."
-				}
-			}
-		},
-		"user": {
-			"doesntexist": {
-				"lvl": "ERR",
-				"msg": "Ein Benutzerkonto mit diesem Benutzername oder dieser E-Mail-Adresse existiert nicht.",
-				"todo": "Bitte geben Sie einen gültigen Benutzernamen oder eine gültige E-Mail-Adresse ein."
-			},
-			"invalid": {
-				"length": {
-					"lvl": "ERR",
-					"msg": "Die Eingabe ist zu kurz.",
-					"todo": "Bitte geben Sie einen gültigen Benutzernamen oder eine gültige E-Mail-Adresse ein."
-				}
-			}
-		},
-		"password": {
-			"invalid": {
-				"length": {
-					"lvl": "ERR",
-					"msg": "Dieses Password hat eine ungültige Länge.",
-					"todo": "Ein Passwort muss aus 8 bis 72 Zeichen bestehen."
-				}
-			},
-			"hibp": {
-				"failed": {
-					"lvl": "WRN",
-					"msg": "Das eingegebene Passwort konnte nicht mit der Liste kompromittierter Passwörter abgeglichen werden.",
-					"todo": "Bitte vergewissern Sie sich, dass Sie ein sicheres und einzigartiges Passwort verwenden."
-				},
-				"compromised": {
-					"lvl": "WRN",
-					"altlvl": "ERR",
-					"msg": "Das eingegebene Passwort ist in der Liste kompromittierter Passwörter enthalten.",
-					"todo": "Sie sollten ein sicheres und einzigartiges Passwort verwenden."
-				}
-			},
-			"doesntmatch": {
-				"lvl": "ERR",
-				"msg": "Die eingegebenen Passwörter stimmen nicht überein.",
-				"todo": "Bitte überprüfen Sie die eingegebenen Passwörter"
-			}
-		}
+{
+	"username.exists": {
+		"lvl": "ERR",
+		"msg": "Ein Benutzerkonto mit diesem Benutzername existiert bereits.",
+		"todo": "Bitte geben Sie einen anderen Benutzernamen ein."
+	},
+	"username.invalid.length": {
+		"lvl": "ERR",
+		"msg": "Der eingegebene Benutzername hat eine ungültige Länge.",
+		"todo": "Ein Benutzername muss aus 3 bis 20 Zeichen bestehen."
+	},
+	"username.invalid.characters": {
+		"lvl": "ERR",
+		"msg": "Der eingegebene Benutzername enthält ungültige Zeichen.",
+		"todo": "Ein Benutzername darf nur lateinische Buchstaben, arabische Ziffern, Bindestriche (-), Unterstriche (_) und Punkte (.) enthalten."
+	},
+	"email.exists": {
+		"lvl": "ERR",
+		"msg": "Ein Benutzerkonto mit dieser E-Mail-Adresse existiert bereits.",
+		"todo": "Bitte geben Sie eine andere E-Mail-Adresse ein."
+	},
+	"email.invalid.characters": {
+		"lvl": "ERR",
+		"msg": "Die eingegebene E-Mail-Adresse hat ein ungültiges Format.",
+		"todo": "Bitte geben Sie eine korrekte E-Mail-Adresse ein."
+	},
+	"user.doesntexist": {
+		"lvl": "ERR",
+		"msg": "Ein Benutzerkonto mit diesem Benutzername oder dieser E-Mail-Adresse existiert nicht.",
+		"todo": "Bitte geben Sie einen gültigen Benutzernamen oder eine gültige E-Mail-Adresse ein."
+	},
+	"user.invalid.length": {
+		"lvl": "ERR",
+		"msg": "Die Eingabe ist zu kurz.",
+		"todo": "Bitte geben Sie einen gültigen Benutzernamen oder eine gültige E-Mail-Adresse ein."
+	},
+	"password.invalid.length": {
+		"lvl": "ERR",
+		"msg": "Dieses Password hat eine ungültige Länge.",
+		"todo": "Ein Passwort muss aus 8 bis 72 Zeichen bestehen."
+	},
+	"password.hibp.failed": {
+		"lvl": "WRN",
+		"msg": "Das eingegebene Passwort konnte nicht mit der Liste kompromittierter Passwörter abgeglichen werden.",
+		"todo": "Bitte vergewissern Sie sich, dass Sie ein sicheres und einzigartiges Passwort verwenden."
+	},
+	"password.hibp.compromised": {
+		"lvl": "WRN",
+		"altlvl": "ERR",
+		"msg": "Das eingegebene Passwort ist in der Liste kompromittierter Passwörter enthalten.",
+		"todo": "Sie sollten ein sicheres und einzigartiges Passwort verwenden."
+	},
+	"password.doesntmatch": {
+		"lvl": "ERR",
+		"msg": "Die eingegebenen Passwörter stimmen nicht überein.",
+		"todo": "Bitte überprüfen Sie die eingegebenen Passwörter"
 	}
+}
