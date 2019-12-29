@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'astronauth');
-define('DB_USER', 'test');
-define('DB_PASS', 'test');
+define('DB_HOST', '');
+define('DB_NAME', '');
+define('DB_USER', '');
+define('DB_PASS', '');
 
 define('GLOBAL_SALT', '00000000');
 

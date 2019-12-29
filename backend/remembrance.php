@@ -22,7 +22,7 @@ class Remembrance {
 	}
 
 	public static function autoPull() {
-		if(isset($_COOKIE[COOKIE_REMEMBERME_UID]){
+		if(isset($_COOKIE[COOKIE_REMEMBERME_UID])){
 			return self::pull($_COOKIE[COOKIE_REMEMBERME_UID]);
 		} else {
 			return false;
@@ -30,6 +30,8 @@ class Remembrance {
 	}
 
 	public static function pull($uid) {
+		global $pdo;
+
 		$query = 'SELECT * FROM remembrances WHERE remembrance_uid = :uid';
 		$values = ['uid' => $uid];
 
@@ -37,17 +39,23 @@ class Remembrance {
 		$s->execute($values);
 		$data = $s->fetch();
 
+		return self::load($data);
+	}
+
+	public static function load($data) {
 		$obj = new Remembrance();
 		$obj->uid = $data['remembrance_uid'];
 		$obj->accountUID = $data['remembrance_account_uid'];
 		$obj->tokenHash = $data['remembrance_tokenhash'];
 		$obj->timestamp = $data['remembrance_timestamp'];
-		$obj->period = $data['remembrance_period']
+		$obj->period = $data['remembrance_period'];
 
 		return $obj;
 	}
 
 	public function insert() {
+		global $pdo;
+
 		$query = '	INSERT INTO remembrances
 					(remembrance_uid, remebrance_account_uid, remembrance_type,
 					remembrance_tokenhash, remembrance_timestamp, remembrance_period)
@@ -67,6 +75,8 @@ class Remembrance {
 	}
 
 	public function update() {
+		global $pdo;
+
 		$query = '	UPDATE remembrances
 					SET remembrance_tokenhash = :tokenhash, remembrance_timestamp = :timestamp,
 					remembrance_period = :period
@@ -75,7 +85,7 @@ class Remembrance {
 		$values = [
 			'tokenhash' => $this->tokenHash,
 			'timestamp' => $this->timestamp,
-			'period' => $this->period;
+			'period' => $this->period,
 			'uid' => $this->uid
 		];
 
@@ -84,6 +94,8 @@ class Remembrance {
 	}
 
 	public function delete() {
+		global $pdo;
+
 		$query = 'DELETE FROM remembrances WHERE remembrance_uid = :uid';
 		$values = ['uid' => $this->uid];
 
@@ -100,7 +112,7 @@ class Remembrance {
 	}
 
 	public function forget() {
-		$this->unsetCookie();
+		self::unsetCookie();
 		$this->delete();
 		return true;
 	}
@@ -114,10 +126,6 @@ class Remembrance {
 
 		setcookie(COOKIE_REMEMBERME_UID, $this->uid, $expires);
 		setcookie(COOKIE_REMEMBERME_TOKEN, $this->token, $expires);
-	}
-
-	public function unsetCookie() {
-		self::unsetCookie();
 	}
 
 	public static function unsetCookie() {
@@ -160,8 +168,8 @@ class Remembrance {
 		return $this->timestamp + $period;
 	}
 
-	private function generateUID() {
-		$this->uid = generateUID();
+	public function generateUID() {
+		$this->uid = bin2hex(random_bytes(16));
 		return $this->uid;
 	}
 

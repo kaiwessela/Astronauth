@@ -1,17 +1,43 @@
 <?php
+$possibleExceptions = [
+	0020 => new AstroEx(2, 'exception.invalid', ''),
+	1410 => new AstroEx(1, 'main.signUp.begin', ''),
+	1431 => new AstroEx(3, 'main.signUp.alreadyAuthenticated', ''),
+	1432 => new AstroEx(3, 'main.signUp.setUsernameFailed', ''),
+	1433 => new AstroEx(3, 'main.signUp.setEmailFailed', ''),
+	1434 => new AstroEx(3, 'main.signUp.passwordHashFailed', ''),
+	1435 => new AstroEx(3, 'main.signUp.passwordInsertFailed', ''),
+	1436 => new AstroEx(3, 'main.signUp.accountInsertFailed', ''),
+	1411 => new AstroEx(1, 'main.signUp.complete', ''),
+];
+
 class ExceptionHandler {
 	public $exceptions = [];
 
 	public function throw($exception) {
-		if($exception instanceof Exception){
-			$exceptions[] = $exception;
+		global $possibleExceptions;
+
+		if($exception instanceof AstroEx){
+			$this->exceptions[] = $exception;
+		} else if(is_int($exception)){
+			$this->exceptions[] = $possibleExceptions[$exception];
+		} else {
+			$this->exceptions[] = new AstroEx(AstroEx::LEVEL_WARN, 000, 'exception.invalid', 'ungültiger Fehler');
 		}
+	}
+
+	public function display() {
+		$output = [];
+		foreach($this->exceptions as $exception){
+			$output[] = $exception->display();
+		}
+
+		return $output;
 	}
 }
 
-class Exception {
+class AstroEx {
 	public $level;
-	public $code;
 	public $name;
 	public $message;
 	public $timestamp;
@@ -21,18 +47,12 @@ class Exception {
 	const LEVEL_WARN = 2;
 	const LEVEL_ERROR = 3;
 
-	function __construct($level, $code, $name, $message) {
+	function __construct($level, $name, $message) {
 		$allowedLevels = [self::LEVEL_INFO, self::LEVEL_DEBUG, self::LEVEL_WARN, self::LEVEL_ERROR];
 		if(in_array($level, $allowedLevels)){
 			$this->level = $level;
 		} else {
 			$this->level = self::LEVEL_INFO;
-		}
-
-		if(is_string($code) && strlen($code) <= 3){
-			$this->code = $code;
-		} else {
-			$this->code = '000';
 		}
 
 		if(is_string($name)){
@@ -45,32 +65,39 @@ class Exception {
 	}
 
 	public function display() {
-		$output = date('H:i:s', $this->timestamp) . ' | ';
+		$time = date('H:i:s', $this->timestamp);
 
 		switch($this->level){
-			case self::LEVEL_INFO: $output .= 'INFO';
-			case self::LEVEL_DEBUG: $output .= 'DEBUG';
-			case self::LEVEL_WARN: $output .= 'WARNING';
-			case self::LEVEL_ERROR: $output .= 'ERROR';
+			case self::LEVEL_INFO:
+				$lvl = 'INFO';
+				break;
+			case self::LEVEL_DEBUG:
+				$lvl = 'DEBUG';
+				break;
+			case self::LEVEL_WARN:
+				$lvl = 'WARNING';
+				break;
+			case self::LEVEL_ERROR:
+				$lvl = 'ERROR';
+				break;
 		}
 
-		$output .= ': [' . $this->code . '] ' . $this->name . ' > ' . $this->message . ';  ';
+		$output = $timestamp . ' | [' . $lvl . '] ' . $this->name . ' > ' . $this->message . ';  ';
 
 		return $output;
 
 		/*
-			09:16:45 | ERROR: [245] Program fail > program execution failed fatally;
+			09:16:45 | [ERROR]: Program fail > program execution failed fatally;
 		*/
 
 	}
 
 	public function arrayify() {
 		$array = [
-			'level' => $this->level;
-			'code' => $this->code;
-			'name' => $this->name;
-			'message' => $this->message;
-			'timestamp' => $this->timestamp;
+			'level' => $this->level,
+			'name' => $this->name,
+			'message' => $this->message,
+			'timestamp' => $this->timestamp
 		];
 
 		return $array;
