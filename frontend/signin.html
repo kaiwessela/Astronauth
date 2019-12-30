@@ -6,20 +6,29 @@
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
-		<h1>Anmelden</h1>
-		<form>
-			<label for="astronauth-username">Benutzername</label>
-			<div class="indicator">
-				<input type="text" name="astronauth-username">
-			</div>
-			<label for="astronauth-password">Passwort</label>
-			<div class="indicator">
-				<input type="password" name="astronauth-password">
-			</div>
-			<label for="astro-remember-me">
+		<form action="?" method="post">
+			<h1>Anmelden</h1>
+			<span class="newhere">Neu hier? <a href="signup.html">Registrieren</a></span>
+			<label>
+				<span class="label-field">Benutzername oder E-Mail-Adresse</span>
+				<input type="text" name="astro-account-identifier">
+				<div class="indicator"></div>
+			</label>
+			<label>
+				<span class="label-field">Passwort</span>
+				<input type="password" name="astro-account-password">
+				<div class="indicator"></div>
+			</label>
+			<a class="under-input" href="#">Passwort vergessen?</a>
+			<label class="checkbodge turn-around">
+				<span class="label-field">Angemeldet bleiben</span>
 				<input type="checkbox" name="astro-remember-me">
-				<span class="checkbodge"></span>
-				Angemeldet bleiben
+				<span class="bodgecheckbox">
+					<span class="bodgetick">
+						<span class="bodgetick-down"></span>
+						<span class="bodgetick-up"></span>
+					</span>
+				</span>
 			</label>
 			<input type="submit" value="Anmelden">
 		</form>
