@@ -1,14 +1,40 @@
+<?php
+session_start();
+require '../backend/main.php';
+
+$astronauth = new Astronauth();
+$astronauth->initialize();
+
+if($astronauth->isAuthenticated()){
+	header('Location: ok.php');
+	echo 'Sie werden weitergeleitet...';
+	exit;
+}
+
+if(isset($_GET['action']) && $_GET['action'] == 'process'){
+	if(!isset($_POST['astro-account-identifier'])){
+
+	}
+
+	if(!isset($_POST['astro-account-password'])){
+
+	}
+
+	
+}
+?>
+
 <!DOCTYPE html>
 <html lang="de">
 	<head>
 		<meta charset="utf-8">
-		<title>Astronauth</title>
+		<title>Anmelden – Astronauth</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
-		<form action="?" method="post">
+		<form action="?action=process" method="post">
 			<h1>Anmelden</h1>
-			<span class="newhere">Neu hier? <a href="signup.html">Registrieren</a></span>
+			<span class="newhere">Neu hier? <a href="signup.php">Registrieren</a></span>
 			<label>
 				<span class="label-field">Benutzername oder E-Mail-Adresse</span>
 				<input type="text" name="astro-account-identifier">
@@ -19,7 +45,7 @@
 				<input type="password" name="astro-account-password">
 				<div class="indicator"></div>
 			</label>
-			<a class="under-input" href="#">Passwort vergessen?</a>
+			<a class="under-input" href="forgotpassword.php">Passwort vergessen?</a>
 			<label class="checkbodge turn-around">
 				<span class="label-field">Angemeldet bleiben</span>
 				<input type="checkbox" name="astro-remember-me">
