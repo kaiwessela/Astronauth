@@ -1,4 +1,5 @@
 <?php
+$e->info('main.loading');
 
 require 'exception.php';
 
@@ -7,6 +8,7 @@ $e = new ExceptionHandler();
 require 'config.php';
 
 $pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USER, DB_PASS);
+$e->debug('pdo', serialize($pdo));
 
 require 'account.php';
 require 'password.php';
@@ -20,10 +22,14 @@ class Astronauth {
 	private $signedIn = false;
 
 	function __construct() {
-
+		global $e;
+		$e->info('astronauth.instance.construct');
 	}
 
 	public function initialize() {
+		global $e;
+		$e->info('astronauth.initialize.begin');
+
 		if($this->tryToRemember() == true){
 			$this->signedIn = true;
 			$this->account = Account::pull($this->remembrance->accountUID);
@@ -40,6 +46,9 @@ class Astronauth {
 	}
 
 	public function tryToRemember() {
+		global $e;
+		$e->info('astronauth.tryToRemember.begin');
+
 		$this->remembrance = Remembrance::autoPull();
 
 		if(!$this->remembrance instanceof Remembrance){
@@ -51,6 +60,9 @@ class Astronauth {
 	}
 
 	public function tryToSignIn() {
+		global $e;
+		$e->info('astronauth.tryToSignIn.begin');
+
 		$this->account = Account::autoPull();
 
 		if(!$this->account instanceof Account){
@@ -77,50 +89,52 @@ class Astronauth {
 
 	public function signUp() {
 		global $e;
-		$e->throw(new AstroEx(0, 'main.signUp.begin', 'Signup attempt started'));
+		$e->info('astronauth.signUp.begin');
 
 		if($this->isAuthenticated()){
-			$e->throw(new AstroEx(3, 'main.signUp.alreadyAuthenticated', 'Signup attempt failed because of existing authentication'));
+			$e->error('astronauth.signUp.alreadyAuthenticated');
 			return false;
 		}
 
 		$this->account = Account::new();
 		if($this->account->autoSetUsername() != true){
-			$e->throw(new AstroEx(3, 'main.signUp.setUsernameFailed', 'Signup attempt failed because username could not be set'));
+			$e->error('astronauth.signUp.setUsernameFailed');
 			return false;
 		}
 
 		if($this->account->autoSetEmail() != true){
-			$e->throw(new AstroEx(3, 'main.signUp.setEmailFailed', 'Signup attempt failed because email could not be set'));
+			$e->error('astronauth.signUp.setEmailFailed');
 			return false;
 		}
 
 		$password = Password::new($this->account);
 		if($password->autoHash() != true){
-			$e->throw(new AstroEx(3, 'main.signUp.passwordHashFailed', 'Signup attempt failed because password hash could no be set'));
+			$e->error('astronauth.signUp.passwordHashFailed');
 			return false;
-			echo serialize($this->account);
 		}
 
 		if($password->insert() != true) {
-			$e->throw(new AstroEx(3, 'main.signUp.passwordInsertFailed', 'Signup attempt failed because password could not be inserted into database'));
+			$e->error('astronauth.signUp.passwordInsertFailed');
 			return false;
 		}
 
 		$this->account->password = $password;
 
 		if($this->account->insert() != true) {
-			$e->throw(new AstroEx(1, 'main.signUp.debug.account', json_encode($this->account)));
-			$e->throw(new AstroEx(3, 'main.signUp.accountInsertFailed', 'Signup attempt failed because account could not be inserted into database'));
+			$e->debug('astronauth.signUp.debug.account', json_encode($this->account)));
+			$e->error('astronauth.signUp.accountInsertFailed');
 			$password->delete();
 			return false;
 		} else {
-			$e->throw(new AstroEx(0, 'main.signUp.complete', 'Signup attempt completed successfully'));
+			$e->info('astronauth.signUp.complete');
 			return true;
 		}
 	}
 
 	public function signOut() {
+		global $e;
+		$e->info('astronauth.signOut.begin');
+
 		if($this->remembrance instanceof Remembrance){
 			$this->remembrance->forget();
 		} else {
@@ -128,10 +142,15 @@ class Astronauth {
 		}
 
 		$this->signedIn = false;
+
+		$e->info('astronauth.signOut.complete');
+		return true;
 	}
 
 	public function isAuthenticated() {
 		return $this->signedIn;
 	}
 }
+
+$e->info('main.loaded');
 ?>

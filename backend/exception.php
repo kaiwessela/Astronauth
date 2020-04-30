@@ -14,6 +14,22 @@ $possibleExceptions = [
 class ExceptionHandler {
 	public $exceptions = [];
 
+	public function error($name) {
+
+	}
+
+	public function warning($name) {
+
+	}
+
+	public function info($name) {
+
+	}
+
+	public function debug($name, $data) {
+
+	}
+
 	public function throw($exception) {
 		global $possibleExceptions;
 
