@@ -1,4 +1,5 @@
 <?php
+namespace Astronauth;
 $login_failed = null;
 if($_POST){
 	try {
@@ -9,7 +10,7 @@ if($_POST){
 
 	if(!$login_failed){
 		$login_failed = false;
-		header('Location: ' . ASTRONAUTH_URL . '/');
+		header('Location: ' . REDIRECT_URL);
 	}
 }
 ?>

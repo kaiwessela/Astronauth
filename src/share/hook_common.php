@@ -3,6 +3,8 @@ namespace Astronauth;
 # --- basic initialisation algorithm common to all endpoints ---
 # do not change these values unless you know what you are doing
 
+const ROOT = '/var/www/astro.local/';
+
 require_once ROOT . 'config/config.php';
 require_once ROOT . 'config/constants.php';
 

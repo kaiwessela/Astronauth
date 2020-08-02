@@ -1,4 +1,5 @@
 <?php
+namespace Astronauth;
 /*
 ENDPOINTS:
 /			- main page if signed in, if not signed in redirect to /signin

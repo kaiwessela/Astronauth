@@ -1,4 +1,6 @@
 <?php
+namespace Astronauth;
+
 class Device {
 	public $key;
 	public $token_hash;
@@ -76,7 +78,7 @@ SQL;
 	}
 
 	public function write() {
-		
+
 	}
 
 	public function refresh() {
@@ -97,8 +99,8 @@ SQL;
 	}
 
 	public function unset_cookies() {
-		setcookie('astronauth_key', '', time() - 3600);
-		setcookie('astronauth_token', '', time() - 3600);
+		setcookie('astronauth_key', '', 1);
+		setcookie('astronauth_token', '', 1);
 	}
 
 	private function generate_key() {

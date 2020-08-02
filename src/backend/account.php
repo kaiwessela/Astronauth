@@ -1,4 +1,6 @@
 <?php
+namespace Astronauth;
+
 class Account {
 	public $id;
 	public $name;
@@ -26,7 +28,7 @@ class Account {
 		if(!$s->execute($values)){
 			throw new DatabaseException($s);
 		} else if($s->rowCount() != 1){
-			throw new Exception('not able to pull account');
+			throw new \Exception('not able to pull account');
 		} else {
 			return Account::load($s->fetchObject());
 		}
@@ -64,30 +66,30 @@ class Account {
 			if(preg_match('/^[A-Za-z0-9.-_]{4,32}$/', $data['name'])){ // NOTE maybe the last - has to be escaped
 				$this->name = $data['name'];
 			} else {
-				throw new Exception('name invalid');
+				throw new \Exception('name invalid');
 			}
 		} else {
-			throw new Exception('no name provided');
+			throw new \Exception('no name provided');
 		}
 
 		if(isset($data['email'])){
 			if(filter_var($data['email'], FILTER_VALIDATE_EMAIL)){
 				$this->email = $data['email'];
 			} else {
-				throw new Exception('email invalid');
+				throw new \Exception('email invalid');
 			}
 		} else {
-			throw new Exception('no email provided');
+			throw new \Exception('no email provided');
 		}
 
 		if(isset($data['password'])){
 			if(preg_match('/^.{8,128}$/', $data['password'])){
 				$this->hash_password($data['password']);
 			} else {
-				throw new Exception('password invalid');
+				throw new \Exception('password invalid');
 			}
 		} else {
-			throw new Exception('no password provided');
+			throw new \Exception('no password provided');
 		}
 
 		$query = <<<SQL
@@ -105,7 +107,7 @@ SQL;
 
 		$s = $pdo->prepare($query);
 		if(!$s->execute($values)){
-			throw new Exception('database error');
+			throw new \Exception('database error');
 		} else {
 			return true;
 		}

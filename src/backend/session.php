@@ -1,4 +1,6 @@
 <?php
+namespace Astronauth;
+
 class Session {
 	private $user;
 

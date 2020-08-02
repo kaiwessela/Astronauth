@@ -1,4 +1,6 @@
 <?php
+namespace Astronauth;
+
 class User {
 	public $session;
 	public $account;
@@ -20,7 +22,7 @@ class User {
 
 		try {
 			$this->device = Device::read();
-		} catch(Exception $e){
+		} catch(\Exception $e){
 			return false;
 		}
 
@@ -41,7 +43,7 @@ class User {
 
 		try {
 			$this->account->insert($data);
-		} catch(Exception $e){
+		} catch(\Exception $e){
 			return false;
 		}
 
@@ -57,7 +59,7 @@ class User {
 
 		if(!$this->account->verify_password($password)){
 			unset($this->account);
-			throw new Exception('invalid pw');
+			throw new \Exception('invalid pw');
 		}
 
 		if($remember){
