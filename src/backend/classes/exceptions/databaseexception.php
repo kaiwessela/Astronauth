@@ -1,9 +1,10 @@
 <?php
-namespace Astronauth;
+namespace Astronauth\Backend\Classes\Exceptions;
+use Exception;
+use PDOStatement;
+use InvalidArgumentException;
 
-class ObjectNotFoundException extends \Exception {}
-
-class DatabaseException extends \Exception {
+class DatabaseException extends Exception {
 	public $query;			# original query
 	public $debug_info;		# PDOStatement->debugDumpParams
 	public $error_code;		# PDOStatement->errorCode
@@ -12,7 +13,7 @@ class DatabaseException extends \Exception {
 	function __construct($pdo_statement) {
 		parent::__construct('Database Exception; use DatabaseException methods for details');
 
-		if(!$pdo_statement instanceof \PDOStatement){
+		if(!$pdo_statement instanceof PDOStatement){
 			throw new InvalidArgumentException('Invalid Argument; PDOStatement required; ' . serialize($pdo_statement));
 		}
 

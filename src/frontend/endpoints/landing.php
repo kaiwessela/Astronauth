@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
 	<head>
-		<?php include 'templates/head.tmp.php'; ?>
+		<?php include 'frontend/templates/head.tmp.php'; ?>
 		<title>Astronauth</title>
 	</head>
 	<body>
 		<main>
-			<h1>Hallo, <?= $astronauth->account->name ?></h1>
+			<h1>Hallo, <?= $username ?></h1>
 			<p>
 				Folgendes kannst du tun:<br>
 				<a href="account">Kontoeinstellungen bearbeiten</a><br>

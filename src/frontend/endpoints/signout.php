@@ -1,12 +1,7 @@
-<?php
-if($_POST){
-	$astronauth->logout();
-}
-?>
 <!DOCTYPE html>
 <html lang="de">
 	<head>
-		<?php include 'templates/head.tmp.php'; ?>
+		<?php include 'frontend/templates/head.tmp.php'; ?>
 		<title>Astronauth</title>
 	</head>
 	<body>
