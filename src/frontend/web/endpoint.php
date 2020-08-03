@@ -47,6 +47,10 @@ class Endpoint {
 		} else if($endpoint == 'signup'){
 			$this->sufficiency_unauthenticated();
 
+			if(Config::SIGNUP_CLOSED){ // TEMP
+				$this->redirect('signin');
+			}
+
 			if($_POST){
 				try {
 					$this->user->register($_POST);

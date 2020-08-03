@@ -27,5 +27,6 @@ class Config {
 
 	# TEMP
 	const REDIRECT_URL = 'http://blog.local/admin';
+	const SIGNUP_CLOSED = true;
 }
 ?>
