@@ -5,7 +5,6 @@ use \Astronauth\Config\Config;
 
 class Endpoint {
 	public $user;
-	public $routes = [];
 
 
 	function __construct() {

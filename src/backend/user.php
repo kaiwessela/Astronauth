@@ -13,7 +13,7 @@ class User { # = Main
 
 	public $pdo;
 
-	private $is_authenticated = false;
+	private $is_authenticated = false; // BUG-GY
 
 
 	function __construct() {
