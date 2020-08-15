@@ -10,6 +10,7 @@ class Device {
 	public $token_hash;
 	public $timestamp;
 	public $active;
+	public $account_id;
 
 	private $token_plain;
 
@@ -26,7 +27,7 @@ class Device {
 		$this->empty = true;
 	}
 
-	public function generate() {
+	public function generate($account_id) {
 		if(!$this->empty){
 			throw new ObjectNotEmptyException($this);
 		}
@@ -35,6 +36,7 @@ class Device {
 		$this->generate_token();
 		$this->timestamp = time();
 		$this->active = true;
+		$this->account_id = $account_id;
 
 		$this->new = true;
 		$this->empty = false;
@@ -77,6 +79,7 @@ class Device {
 		$this->token_hash = $data->device_tokenhash;
 		$this->timestamp = (int) $data->device_timestamp;
 		$this->active = (bool) $data->device_active;
+		$this->account_id = $data->device_account_id;
 
 		$this->new = false;
 		$this->empty = false;
@@ -91,15 +94,16 @@ class Device {
 			$this->hash_token();
 
 			$query = <<<SQL
-INSERT INTO devices (device_key, device_tokenhash, device_timestamp, device_active)
-VALUES (:key, :tokenhash, :timestamp, :active)
+INSERT INTO devices (device_key, device_tokenhash, device_timestamp, device_active, device_account_id)
+VALUES (:key, :tokenhash, :timestamp, :active, :account_id)
 SQL;
 
 			$values = [
 				'key' => $this->key,
 				'tokenhash' => $this->token_hash,
 				'timestamp' => $this->timestamp,
-				'active' => $this->active
+				'active' => $this->active,
+				'account_id' => $this->account_id
 			];
 		} else {
 			$query = 'UPDATE devices SET device_tokenhash = :tokenhash, device_active = :active WHERE device_key = :key';

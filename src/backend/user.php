@@ -53,6 +53,10 @@ class User { # = Main
 		if($this->device->verify()){
 			$this->device->refresh();
 			$this->session->write();
+
+			$this->account = new Account($this->pdo);
+			$this->account->pull_by_id($this->device->account_id);
+
 			$this->is_authenticated = true;
 			return true;
 		} else {
@@ -83,7 +87,7 @@ class User { # = Main
 
 		if($remember){
 			$this->device = new Device($this->pdo);
-			$this->device->generate();
+			$this->device->generate($this->account->id);
 			$this->device->push();
 			$this->device->write();
 		}
@@ -93,8 +97,11 @@ class User { # = Main
 	}
 
 	public function logout() {
-		$this->device->archive();
-		$this->device->erase();
+		if(!$this->device->is_empty()){
+			$this->device->archive();
+			$this->device->erase();
+		}
+
 		$this->session->clear();
 		unset($this->session);
 		unset($this->account);
