@@ -1,9 +1,11 @@
 <?php
-namespace Astronauth\Backend\Classes;
+namespace Astronauth\Backend\Models;
+use Astronauth\Backend\ModelTrait;
+use Astronauth\Backend\Exceptions\DatabaseException;
+use Astronauth\Backend\Exceptions\ObjectNotEmptyException;
+use Astronauth\Backend\Exceptions\ObjectNotFoundException;
+use Astronauth\Backend\Exceptions\WrongObjectStateException;
 use PDO;
-use Astronauth\Backend\Classes\Exceptions\DatabaseException;
-use Astronauth\Backend\Classes\Exceptions\ObjectNotEmptyException;
-use Astronauth\Backend\Classes\Exceptions\ObjectNotFoundException;
 
 class Device {
 	public $key;
@@ -14,22 +16,22 @@ class Device {
 
 	private $token_plain;
 
-	private $pdo;
 	private $new;
 	private $empty;
 
 	const EXPIRATION_TIME = 180 * 24 * 60 * 60;
 
+	use ModelTrait;
 
-	function __construct(PDO &$pdo) {
-		$this->pdo = &$pdo;
+
+	function __construct() {
 		$this->new = false;
 		$this->empty = true;
 	}
 
 	public function generate($account_id) {
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		$this->generate_key();
@@ -44,7 +46,7 @@ class Device {
 
 	public function read() {
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		if(isset($_COOKIE['astronauth_key'])){
@@ -53,14 +55,16 @@ class Device {
 	}
 
 	public function pull($key) {
+		$pdo = self::open_pdo();
+
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		$query = 'SELECT * FROM devices WHERE device_key = :key';
 		$values = ['key' => $key];
 
-		$s = $this->pdo->prepare($query);
+		$s = $pdo->prepare($query);
 		if(!$s->execute($values)){
 			throw new DatabaseException($s);
 		} else if($s->rowCount() != 1){
@@ -72,7 +76,7 @@ class Device {
 
 	public function load($data) {
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		$this->key = $data->device_key;
@@ -86,8 +90,10 @@ class Device {
 	}
 
 	public function push() {
+		$pdo = self::open_pdo();
+
 		if($this->empty){
-			throw new ObjectEmptyException();
+			throw new WrongObjectStateException('not empty');
 		}
 
 		if($this->new){
@@ -114,7 +120,7 @@ SQL;
 			];
 		}
 
-		$s = $this->pdo->prepare($query);
+		$s = $pdo->prepare($query);
 		if(!$s->execute($values)){
 			throw new DatabaseException($s);
 		} else {
@@ -166,48 +172,8 @@ SQL;
 		return password_verify($_COOKIE['astronauth_token'] ?? null, $this->token_hash);
 	}
 
-	private function is_active() {
+	public function is_active() {
 		return (bool) $this->active;
 	}
-
-	public function is_new() {
-		return $this->new;
-	}
-
-	public function is_empty() {
-		return $this->empty;
-	}
-
-	public function goodnight() {
-		unset($this->token_plain);
-		unset($this->pdo);
-	}
-
-	public function goodmorning(PDO &$pdo) {
-		$this->pdo = $pdo;
-	}
-
-	/*
-	public function hibernate() {
-		return [
-			'key' => $this->key,
-			'token_hash' => $this->token_hash,
-			'timestamp' => $this->timestamp,
-			'active' => $this->active,
-			'new' => $this->new,
-			'empty' => $this->empty
-		]
-	}
-
-	public function wakeup(PDO &$pdo, $data) {
-		$this->pdo = &$pdo;
-		$this->key = $data['key'];
-		$this->token_hash = $data['token_hash'];
-		$this->timestamp = $data['timestamp'];
-		$this->active = $data['active'],
-		$this->new = $data['new'],
-		$this->empty = $data['empty'];
-	}
-	*/
 }
 ?>

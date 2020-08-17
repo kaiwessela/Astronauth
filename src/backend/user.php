@@ -1,8 +1,8 @@
 <?php
 namespace Astronauth\Backend;
-use \Astronauth\Backend\Classes\Account;
-use \Astronauth\Backend\Classes\Device;
-use \Astronauth\Backend\Classes\Session;
+use \Astronauth\Backend\Models\Account;
+use \Astronauth\Backend\Models\Device;
+use \Astronauth\Backend\Session;
 use \Astronauth\Config\Config;
 use PDO;
 
@@ -11,18 +11,11 @@ class User { # = Main
 	public $account;
 	public $device;
 
-	public $pdo;
-
 	private $is_authenticated = false; // BUG-GY
 
 
 	function __construct() {
 		$this->session = new Session($this);
-		$this->pdo = new PDO(
-			'mysql:host=' . Config::DB_HOST . ';dbname=' . Config::DB_NAME,
-			Config::DB_USER,
-			Config::DB_PASSWORD
-		);
 
 		setlocale(\LC_ALL, Config::SERVER_LANG . '.utf-8');
 
@@ -44,7 +37,7 @@ class User { # = Main
 		}
 
 		try {
-			$this->device = new Device($this->pdo);
+			$this->device = new Device();
 			$this->device->read();
 		} catch(\Exception $e){
 			return false;
@@ -54,7 +47,7 @@ class User { # = Main
 			$this->device->refresh();
 			$this->session->write();
 
-			$this->account = new Account($this->pdo);
+			$this->account = new Account();
 			$this->account->pull_by_id($this->device->account_id);
 
 			$this->is_authenticated = true;
@@ -70,14 +63,14 @@ class User { # = Main
 	}
 
 	public function register($data) {
-		$this->account = new Account($this->pdo);
+		$this->account = new Account();
 		$this->account->generate();
 
 		$this->account->insert($data);
 	}
 
 	public function login($identifier, $password, $remember = false) {
-		$this->account = new Account($this->pdo);
+		$this->account = new Account();
 		$this->account->pull($identifier);
 
 		if(!$this->account->verify_password($password)){
@@ -86,7 +79,7 @@ class User { # = Main
 		}
 
 		if($remember){
-			$this->device = new Device($this->pdo);
+			$this->device = new Device();
 			$this->device->generate($this->account->id);
 			$this->device->push();
 			$this->device->write();
@@ -97,7 +90,7 @@ class User { # = Main
 	}
 
 	public function logout() {
-		if(!$this->device->is_empty()){
+		if($this->device->is_active()){
 			$this->device->archive();
 			$this->device->erase();
 		}

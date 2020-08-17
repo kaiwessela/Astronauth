@@ -1,11 +1,12 @@
 <?php
-namespace Astronauth\Backend\Classes;
+namespace Astronauth\Backend\Models;
+use \Astronauth\Backend\ModelTrait;
+use \Astronauth\Backend\Exceptions\DatabaseException;
+use \Astronauth\Backend\Exceptions\InvalidInputException;
+use \Astronauth\Backend\Exceptions\ObjectAlreadyExistsException;
+use \Astronauth\Backend\Exceptions\WrongObjectStateException;
+use \Astronauth\Backend\Exceptions\ObjectNotFoundException;
 use PDO;
-use \Astronauth\Backend\Classes\Exceptions\DatabaseException;
-use \Astronauth\Backend\Classes\Exceptions\InvalidInputException;
-use \Astronauth\Backend\Classes\Exceptions\ObjectAlreadyExistsException;
-use \Astronauth\Backend\Classes\Exceptions\ObjectNotEmptyException;
-use \Astronauth\Backend\Classes\Exceptions\ObjectNotFoundException;
 
 class Account {
 	public $id;
@@ -13,19 +14,20 @@ class Account {
 	public $email;
 	public $pwhash;
 
-	private $pdo;
 	private $new;
 	private $empty;
 
+	use ModelTrait;
 
-	function __construct(PDO &$pdo) {
-		$this->pdo = &$pdo;
+
+	function __construct() {
+		$this->new = false;
 		$this->empty = true;
 	}
 
 	public function generate() {
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		$this->generate_id();
@@ -35,14 +37,16 @@ class Account {
 	}
 
 	public function pull(string $identifier){
+		$pdo = self::open_pdo();
+
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		$query = 'SELECT * FROM accounts WHERE account_name = :identifier OR account_email = :identifier';
 		$values = ['identifier' => $identifier];
 
-		$s = $this->pdo->prepare($query);
+		$s = $pdo->prepare($query);
 		if(!$s->execute($values)){
 			throw new DatabaseException($s);
 		} else if($s->rowCount() != 1){
@@ -53,14 +57,16 @@ class Account {
 	}
 
 	public function pull_by_id(string $id) {
+		$pdo = self::open_pdo();
+
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		$query = 'SELECT * FROM accounts WHERE account_id = :id';
 		$values = ['id' => $id];
 
-		$s = $this->pdo->prepare($query);
+		$s = $pdo->prepare($query);
 		if(!$s->execute($values)){
 			throw new DatabaseException($s);
 		} else if($s->rowCount() != 1){
@@ -70,27 +76,9 @@ class Account {
 		}
 	}
 
-	public function pull_by_id_or_email($id, $email) {
-		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
-		}
-
-		$query = 'SELECT DISTINCT * FROM accounts WHERE account_id = :id OR account_email = :email';
-		$values = ['id' => $id, 'email' => $email];
-
-		$s = $this->pdo->prepare($query);
-		if(!$s->execute($values)){
-			throw new DatabaseException($s);
-		} else if($s->rowCount() != 1){
-			throw new ObjectNotFoundException();
-		} else {
-			$this->load($s->fetchObject());
-		}
-	}
-
 	public function load($data){
 		if(!$this->empty){
-			throw new ObjectNotEmptyException($this);
+			throw new WrongObjectStateException('empty');
 		}
 
 		$this->id = $data->account_id;
@@ -103,8 +91,10 @@ class Account {
 	}
 
 	public function push() {
+		$pdo = self::open_pdo();
+
 		if($this->empty){
-			throw new Exception(); // TODO
+			throw new WrongObjectStateException('not empty');
 		}
 
 		if($this->new){
@@ -153,13 +143,18 @@ SQL;
 			$this->email = $data['email'];
 		}
 
+		$found = false;
 		try {
 			$account = new Account();
-			$account->pull_by_id_or_email($this->id, $this->email);
+			$account->pull($this->id);
 			$found = true;
-		} catch(ObjectNotFoundException $e){
-			$found = false;
-		}
+		} catch(ObjectNotFoundException $e){}
+
+		try {
+			$account = new Account();
+			$account->pull($this->email);
+			$found = true;
+		} catch(ObjectNotFoundException $e){}
 
 		if($found){
 			throw new ObjectAlreadyExistsException();
@@ -187,34 +182,5 @@ SQL;
 	public function verify_password($password) {
 		return password_verify($password, $this->pwhash);
 	}
-
-	public function goodnight() {
-		unset($this->pdo);
-	}
-
-	public function goodmorning(PDO &$pdo) {
-		$this->pdo = $pdo;
-	}
-
-	/*public function hibernate() {
-		return [
-			'id' => $this->id,
-			'name' => $this->name,
-			'email' => $this->email,
-			'pwhash' => $this->pwhash,
-			'new' => $this->new,
-			'empty' => $this->empty
-		]
-	}
-
-	public function wakeup(PDO &$pdo, $data) {
-		$this->pdo = &$pdo;
-		$this->id = $data['id'];
-		$this->name = $data['name'];
-		$this->email = $data['email'];
-		$this->pwhash = $data['pwhash'],
-		$this->new = $data['new'],
-		$this->empty = $data['empty'];
-	}*/
 }
 ?>

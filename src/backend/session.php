@@ -1,5 +1,7 @@
 <?php
-namespace Astronauth\Backend\Classes;
+namespace Astronauth\Backend;
+use \Astronauth\Backend\Models\Account;
+use \Astronauth\Backend\Models\Device;
 
 class Session {
 	private $user;
@@ -23,15 +25,12 @@ class Session {
 			return false;
 		}
 
-		$account->goodmorning($this->user->pdo);
-
 		$this->user->account = $account;
 
 		if(isset($_SESSION[self::DEVICE_KEYWORD])){
 			$device = unserialize($_SESSION[self::DEVICE_KEYWORD]);
 
 			if($device instanceof Device){
-				$device->goodmorning($this->user->pdo);
 				$this->user->device = $device;
 			}
 		}
@@ -41,12 +40,10 @@ class Session {
 
 	public function write() {
 		if($this->user->account){
-			$this->user->account->goodnight();
 			$_SESSION[self::ACCOUNT_KEYWORD] = serialize($this->user->account);
 		}
 
 		if($this->user->device){
-			$this->user->device->goodnight();
 			$_SESSION[self::DEVICE_KEYWORD] = serialize($this->user->device);
 		}
 	}
