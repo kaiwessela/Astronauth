@@ -28,7 +28,7 @@ class Endpoint {
 			if($_POST){
 				try {
 					$this->user->login($_POST['identifier'], $_POST['password'], (bool) $_POST['remember'] ?? false);
-					$this->redirect('');
+					$this->redirect(Config::REDIRECT_URL, true);
 					$show_error = false;
 					$show_form = false;
 					$show_success = true;
@@ -103,8 +103,12 @@ class Endpoint {
 		include "frontend/endpoints/$endpoint.php";
 	}
 
-	public function redirect($location = '') {
-		header('Location: ' . Config::SERVER_URL . '/' . $location);
+	public function redirect($location = '', $external = false) {
+		if($external){
+			header('Location: ' . $location);
+		} else {
+			header('Location: ' . Config::SERVER_URL . '/' . $location);
+		}
 	}
 
 	public function sufficiency_authenticated($redirect = '') {
