@@ -1,5 +1,5 @@
 <?php
-namespace Astronauth\Backend\Classes\Exceptions;
+namespace Astronauth\Backend\Exceptions;
 use Exception;
 use PDOStatement;
 use InvalidArgumentException;
