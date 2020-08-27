@@ -1,5 +1,5 @@
 <?php
-namespace Astronauth\Backend\Exception;
+namespace Astronauth\Backend\Exceptions;
 use Exception;
 
 class InvalidInputException extends Exception {
