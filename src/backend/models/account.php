@@ -50,7 +50,7 @@ class Account {
 		if(!$s->execute($values)){
 			throw new DatabaseException($s);
 		} else if($s->rowCount() != 1){
-			throw new \Exception('not able to pull account');
+			throw new ObjectNotFoundException();
 		} else {
 			$this->load($s->fetchObject());
 		}
@@ -70,7 +70,7 @@ class Account {
 		if(!$s->execute($values)){
 			throw new DatabaseException($s);
 		} else if($s->rowCount() != 1){
-			throw new \Exception('not able to pull account');
+			throw new ObjectNotFoundException();
 		} else {
 			$this->load($s->fetchObject());
 		}
