@@ -118,7 +118,7 @@ SQL;
 			];
 		}
 
-		$s = $this->pdo->prepare($query);
+		$s = $pdo->prepare($query);
 		if($s->execute($values)){
 
 		} else {
