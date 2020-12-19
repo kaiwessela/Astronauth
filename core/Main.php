@@ -50,7 +50,7 @@ class Main {
 			return $this->session->write('manual');
 		}
 
-		if($this->remember){
+		if($remember){
 			$this->session->write('cookie');
 		} else {
 			$this->session->write('session');

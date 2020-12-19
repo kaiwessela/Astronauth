@@ -1,13 +1,4 @@
 <?php
-/*#====================
-astronauth/ - landing page. if signed in: redirect to account; if not: redirect to signin
-astronauth/signin/
-astronauth/signout/
-astronauth/signup/
-astronauth/forgotPassword/ - …
-astronauth/account/ - own account management
-*/#====================
-
 session_start();
 
 set_exception_handler(function($e){
@@ -39,14 +30,14 @@ if($path == 'astronauth'){
 	$signin_success = null;
 
 	if(!empty($_POST)){
-		if($signin_success = $astronauth->signin($_POST['identifier'], $_POST['password'], (bool) $_POST['remember'])){
+		if($signin_success = $astronauth->signin($_POST['identifier'], $_POST['password'], (bool) $_POST['remember'] ?? false)){
 			header('Location: ' . $server->url . '/account');
 		}
 	}
 
 	require __DIR__ . '/templates/signin.php';
 
-} else if($path == 'astronauth/signout'){
+} else if($path == 'astronauth/account/signout'){
 	if(!$astronauth->is_authenticated()){
 		$authstate_redirect = true;
 		header('Location: ' . $server->url . '/signin');

@@ -1,5 +1,6 @@
 <?php
 namespace Astronauth\Model;
+use \Astronauth\Config\Config;
 use \Astronauth\Model\DatabaseObjects\Account;
 use \Astronauth\Model\DatabaseObjects\Device;
 
@@ -51,7 +52,9 @@ class Session {
 			return false;
 		}
 
-		$this->write_cookies($this->device->refresh());
+		if($this->mode == 'cookie'){
+			$this->write_cookies($this->device->refresh());
+		}
 
 		$this->account = &$this->device->account;
 		$this->authenticated = true;
@@ -98,8 +101,8 @@ class Session {
 
 	private function write_cookies($token){
 		if($this->mode == 'cookie'){
-			setcookie('astronauth_id', $this->device->id);
-			setcookie('astronauth_token', $token);
+			setcookie('astronauth_id', $this->device->id, time() + Config::COOKIE_ENDURANCE * 24 * 3600);
+			setcookie('astronauth_token', $token, time() + Config::COOKIE_ENDURANCE * 24 * 3600);
 		}
 
 		$_SESSION['astronauth_id'] = $this->device->id;

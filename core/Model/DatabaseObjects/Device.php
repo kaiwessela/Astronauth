@@ -1,5 +1,6 @@
 <?php
 namespace Astronauth\Model\DatabaseObjects;
+use \Astronauth\Config\Config;
 use \Astronauth\Model\DatabaseObject;
 use \Astronauth\Model\DatabaseObjects\Account;
 use \Astronauth\Exceptions\DatabaseException;
@@ -104,15 +105,11 @@ class Device extends DatabaseObject {
 			throw new WrongObjectStateException('not empty');
 		}
 
-		if($this->timestamp + 60*60*24*180 < time()){
+		if($this->timestamp + 3600 * 24 * Config::COOKIE_ENDURANCE < time()){
 			return false;
 		}
 
-		if(!password_verify($token, $this->tokenhash)){
-			return false;
-		}
-
-		return true;
+		return password_verify($token, $this->tokenhash);
 	}
 
 	public function refresh() {
@@ -142,6 +139,7 @@ class Device extends DatabaseObject {
 	private function generate_token() {
 		$token = bin2hex(openssl_random_pseudo_bytes(64));
 		$this->tokenhash = password_hash($token, PASSWORD_DEFAULT);
+
 		return $token;
 	}
 

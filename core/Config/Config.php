@@ -25,6 +25,9 @@ class Config {
 	const DB_USER = 'user'; # username of your database user
 	const DB_PASSWORD = 'password'; # password of your database user
 
+	# SECURITY
+	const COOKIE_ENDURANCE = 180; # (days)
+
 	# TEMP
 	const REDIRECT_URL = 'http://blog.local/admin';
 	const SIGNUP_CLOSED = true;
