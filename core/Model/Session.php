@@ -3,6 +3,8 @@ namespace Astronauth\Model;
 use \Astronauth\Config\Config;
 use \Astronauth\Model\DatabaseObjects\Account;
 use \Astronauth\Model\DatabaseObjects\Device;
+use \Astronauth\Exceptions\AuthenticationStateException;
+use \Astronauth\Exceptions\EmptyResultException;
 
 class Session {
 	public $account;
@@ -62,16 +64,10 @@ class Session {
 	}
 
 	public function write($mode = null) {
-		if($mode != null){
-			$this->mode = $mode;
-		}
-
-		if(empty($this->mode)){
-			// error
-		}
+		$this->mode = $mode;
 
 		if($this->account->is_empty()){
-			// error
+			throw new AuthenticationStateException('auth');
 		}
 
 		$this->device = new Device();
@@ -86,17 +82,15 @@ class Session {
 	}
 
 	public function erase() {
-		$this->device->deactivate();
-
-		if($this->mode == 'cookie'){
-			setcookie('astronauth_id', '', -1000);
-			setcookie('astronauth_token', '', -1000);
-		}
-
 		if($this->mode != 'manual'){
+			setcookie('astronauth_id', 'expired', 1);
+			setcookie('astronauth_token', 'expired', 1);
+
 			$_SESSION['astronauth_id'] = '';
 			$_SESSION['astronauth_token'] = '';
 		}
+
+		$this->device->deactivate();
 	}
 
 	private function write_cookies($token){

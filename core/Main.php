@@ -120,5 +120,9 @@ class Main {
 	public function get_account_name() {
 		return $this->session->account->name;
 	}
+
+	public function get_account_email() {
+		return $this->session->account->email;
+	}
 }
 ?>

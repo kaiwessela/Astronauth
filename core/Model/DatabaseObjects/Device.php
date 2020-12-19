@@ -105,6 +105,10 @@ class Device extends DatabaseObject {
 			throw new WrongObjectStateException('not empty');
 		}
 
+		if($this->active != true){
+			return false;
+		}
+
 		if($this->timestamp + 3600 * 24 * Config::COOKIE_ENDURANCE < time()){
 			return false;
 		}

@@ -31,7 +31,12 @@ if($path == 'astronauth'){
 
 	if(!empty($_POST)){
 		if($signin_success = $astronauth->signin($_POST['identifier'], $_POST['password'], (bool) $_POST['remember'] ?? false)){
-			header('Location: ' . $server->url . '/account');
+			// TEMP
+			if(!empty(\Astronauth\Config\Config::REDIRECT_URL)){
+				header('Location: ' . $server->url . '/account');
+			} else {
+				header('Location: ' . \Astronauth\Config\Config::REDIRECT_URL);
+			}
 		}
 	}
 
@@ -54,6 +59,11 @@ if($path == 'astronauth'){
 	require __DIR__ . '/templates/signout.php';
 
 } else if($path == 'astronauth/signup'){
+	if($astronauth->is_authenticated() /* TEMP */ || \Astronauth\Config\Config::SIGNUP_CLOSED){
+		$authstate_redirect = true;
+		header('Location: ' . $server->url . '/signin');
+	}
+
 	$signup_return = null;
 
 	if(!empty($_POST)){
@@ -68,6 +78,11 @@ if($path == 'astronauth'){
 	require __DIR__ . '/templates/forgotPassword.php';
 
 } else if($path == 'astronauth/account'){
+	if(!$astronauth->is_authenticated()){
+		$authstate_redirect = true;
+		header('Location: ' . $server->url . '/signin');
+	}
+
 	require __DIR__ . '/templates/account.php';
 
 } else {
