@@ -128,7 +128,7 @@ class Account extends DatabaseObject {
 			return false;
 		}
 
-		if(password_needs_rehash($this->pwhash)){
+		if(password_needs_rehash($this->pwhash, PASSWORD_DEFAULT)){
 			try {
 				$this->set_password($password);
 				$this->push();
