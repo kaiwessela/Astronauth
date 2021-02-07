@@ -1,21 +1,7 @@
 {
 	"name": "kaiwessela/astronauth",
 	"description": "Astronauth website authentication module.",
-	"repositories": [
-		{
-			"type": "package",
-			"package": {
-				"name": "redhatofficial/overpass",
-				"version": "3.0.4",
-				"dist": {
-					"url": "https://github.com/RedHatOfficial/Overpass/archive/3.0.4.zip",
-					"type": "zip"
-				}
-			}
-		}
-	],
 	"require": {
-		"php": ">=8.0",
-		"redhatofficial/overpass": "*"
+		"php": ">=8.0"
 	}
 }
