@@ -2,21 +2,21 @@
 	font-family: 'Overpass';
 	font-weight: 400;
 	font-style: normal;
-	src: url('../ttf/Overpass-Regular.ttf');
+	src: url('../fonts/overpass-regular.woff2');
 }
 
 @font-face {
 	font-family: 'Overpass';
 	font-weight: 400;
 	font-style: italic;
-	src: url('../ttf/Overpass-Italic.ttf');
+	src: url('../fonts/overpass-italic.woff2');
 }
 
 @font-face {
 	font-family: 'Overpass';
 	font-weight: 700;
 	font-style: normal;
-	src: url('../ttf/Overpass-Bold.ttf');
+	src: url('../fonts/overpass-bold.woff2');
 }
 
 :root {

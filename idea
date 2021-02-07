@@ -15,14 +15,18 @@ ENDPOINTS
 
 PERMISSIONS
 
+astronauth.account.create
+astronauth.account.delete
 astronauth.account.signin
 astronauth.account.signup
-astronauth.account.delete
 astronauth.account.manage.username
 astronauth.account.manage.email
 astronauth.account.manage.password
 
 astronauth.accounts.create
+astronauth.accounts.delete
+astronauth.accounts.manage.*
+
 
 
 GROUPS
@@ -30,3 +34,8 @@ GROUPS
 anonymous
 user
 admin
+
+
+
+OTHER PERMISSIONS
+blog.admin.*
