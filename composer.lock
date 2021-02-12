@@ -4,18 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "993208e23a1c8d24b4fcb7bb2489b678",
-    "packages": [
-        {
-            "name": "redhatofficial/overpass",
-            "version": "3.0.4",
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/RedHatOfficial/Overpass/archive/3.0.4.zip"
-            },
-            "type": "library"
-        }
-    ],
+    "content-hash": "1191573b3c653f14ef6ef4547911cb32",
+    "packages": [],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
